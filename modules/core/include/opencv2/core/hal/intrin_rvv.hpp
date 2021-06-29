@@ -20,7 +20,7 @@ CV_CPU_OPTIMIZATION_HAL_NAMESPACE_BEGIN
 
 //////////// Unsupported native intrinsics in C++ ////////////
 
-struct vuint8mf2_t
+/*struct vuint8mf2_t
 {
     uchar val[8] = {0};
     vuint8mf2_t() {}
@@ -224,7 +224,7 @@ inline vint16mf2_t vwcvt_x_x_v_i16mf2 (vint8mf4_t src, size_t vl)
     }
     return vle16_v_i16mf2(tmp, vl);
 }
-
+*/
 //////////// Types ////////////
 
 struct v_uint8x16
