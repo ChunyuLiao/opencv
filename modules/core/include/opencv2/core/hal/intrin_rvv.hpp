@@ -1558,12 +1558,12 @@ inline v_float64x2 v_muladd(const v_float64x2& a, const v_float64x2& b, const v_
 #define OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(_Tpvec, suffix, shift, vl) \
 inline bool v_check_all(const _Tpvec& a) \
 { \
-    v_uint64x2 v = v_uint64x2((vuint64m1_t)vsrl_vx_##suffix##m1(vnot_v_##suffix##m1(a, vl), shift, vl)); \
+    v_uint64x2 v = v_uint64x2(vreinterpret_v_##suffix##m1_u64m1(vsrl_vx_##suffix##m1(vnot_v_##suffix##m1(a, vl), shift, vl))); \
     return (v.val[0] | v.val[1]) == 0; \
 } \
 inline bool v_check_any(const _Tpvec& a) \
 { \
-    v_uint64x2 v = v_uint64x2((vuint64m1_t)vsrl_vx_##suffix##m1(a, shift, vl)); \
+    v_uint64x2 v = v_uint64x2(vreinterpret_v_##suffix##m1_u64m1(vsrl_vx_##suffix##m1(a, shift, vl))); \
     return (v.val[0] | v.val[1]) != 0; \
 }
 
