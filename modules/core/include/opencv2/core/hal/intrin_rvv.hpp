@@ -616,11 +616,11 @@ OPENCV_HAL_IMPL_RVV_ONE_TIME_REINTERPRET(int32x4, int64x2, vint32m1_t, vint64m1_
 
 
 #define OPENCV_HAL_IMPL_RVV_TWO_TIME_REINTERPRET(_Tpvec1, _Tpvec2, _nTpvec1, _nTpvec2, suffix1, suffix2, nsuffix1, nsuffix2, width1, width2, vl1, vl2, tsuffix, _tTpvec) \
-inline v_##_Tpvec1 v_reinterpret_as_##suffix2_##suffix1(const v_##_Tpvec2& v) \
+inline v_##_Tpvec1 v_reinterpret_as_##suffix1(const v_##_Tpvec2& v) \
 { \
     return v_##_Tpvec1(vreinterpret_v_##tsuffix##m1_##nsuffix1##m1(vreinterpret_v_##nsuffix2##m1_##tsuffix##m1(vle##width2##_v_##nsuffix2##m1(v.val, vl2)))); \
 } \
-inline v_##_Tpvec2 v_reinterpret_as_##suffix1_##suffix2(const v_##_Tpvec1& v) \
+inline v_##_Tpvec2 v_reinterpret_as_##suffix2(const v_##_Tpvec1& v) \
 { \
     return v_##_Tpvec2(vreinterpret_v_##tsuffix##m1_##nsuffix2##m1(vreinterpret_v_##nsuffix1##m1_##tsuffix##m1(vle##width1##_v_##nsuffix1##m1(v.val, vl1)))); \
 }
@@ -654,11 +654,11 @@ OPENCV_HAL_IMPL_RVV_TWO_TIME_REINTERPRET(int16x8, float64x2, vint16m1_t, vfloat6
 OPENCV_HAL_IMPL_RVV_TWO_TIME_REINTERPRET(int32x4, float64x2, vint32m1_t, vfloat64m1_t, s32, f64, i32, f64, 32, 64, 4, 2, i64, vint64m1_t)
 
 #define OPENCV_HAL_IMPL_RVV_THREE_TIME_REINTERPRET(_Tpvec1, _Tpvec2, _nTpvec1, _nTpvec2, suffix1, suffix2, nsuffix1, nsuffix2, width1, width2, vl1, vl2, tsuffix1, _tTpvec1, tsuffix2, _tTpvec2) \
-inline v_##_Tpvec1 v_reinterpret_as_##suffix2_##suffix1(const v_##_Tpvec2& v) \
+inline v_##_Tpvec1 v_reinterpret_as_##suffix1(const v_##_Tpvec2& v) \
 { \
     return v_##_Tpvec1(vreinterpret_v_##tsuffix1##m1_##nsuffix1##m1(vreinterpret_v_##tsuffix2##m1_##tsuffix1##m1(vreinterpret_v_##nsuffix2##m1_##tsuffix2##m1(vle##width2##_v_##nsuffix2##m1(v.val, vl2))))); \
 } \
-inline v_##_Tpvec2 v_reinterpret_as_##suffix1_##suffix2(const v_##_Tpvec1& v) \
+inline v_##_Tpvec2 v_reinterpret_as_##suffix2(const v_##_Tpvec1& v) \
 { \
     return v_##_Tpvec2(vreinterpret_v_##tsuffix2##m1_##nsuffix2##m1(vreinterpret_v_##tsuffix1##m1_##tsuffix2##m1(vreinterpret_v_##nsuffix1##m1_##tsuffix1##m1(vle##width1##_v_##nsuffix1##m1(v.val, vl1))))); \
 }
@@ -707,10 +707,6 @@ OPENCV_HAL_IMPL_RVV_EXTRACT_FP(v_float64x2, double, f64, vfmv_f_s_f64m1_f64, 2)
 ////////////// Load/Store //////////////
 
 #define OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(_Tpvec, _nTpvec, _Tp, hvl, vl, width, suffix, vmv) \
-inline _Tpvec v_load(const _Tp* ptr) \
-{ \
-    return _Tpvec((_nTpvec)vle8_v_u8m1((uchar*)ptr, 16)); \
-} \
 inline _Tpvec v_load_aligned(const _Tp* ptr) \
 { \
     return _Tpvec(vle##width##_v_##suffix##m1(ptr, vl)); \
