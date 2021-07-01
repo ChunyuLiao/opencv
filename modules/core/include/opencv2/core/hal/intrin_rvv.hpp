@@ -1635,15 +1635,15 @@ OPENCV_HAL_IMPL_RVV_ABSDIFF(v_float64x2, absdiff)
 OPENCV_HAL_IMPL_RVV_ABSDIFF(v_int8x16, absdiffs)
 OPENCV_HAL_IMPL_RVV_ABSDIFF(v_int16x8, absdiffs)
 
-#define OPENCV_HAL_IMPL_RVV_ABSDIFF_S(_Tpvec, _rTpvec, _nwTpvec, sub, rshr, vl) \
+#define OPENCV_HAL_IMPL_RVV_ABSDIFF_S(_Tpvec, _rTpvec, _nwTpvec, sub, rshr, vl, vreinterpret) \
 inline _rTpvec v_absdiff(const _Tpvec& a, const _Tpvec& b) \
 { \
-    return _rTpvec(rshr((_nwTpvec)sub(v_max(a, b), v_min(a, b), vl), 0, vl)); \
+    return _rTpvec(rshr(vreinterpret(sub(v_max(a, b), v_min(a, b), vl)), 0, vl)); \
 }
 
-OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int8x16, v_uint8x16, vuint16m2_t, vwsub_vv_i16m2, vnclipu_wx_u8m1, 16)
-OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int16x8, v_uint16x8, vuint32m2_t, vwsub_vv_i32m2, vnclipu_wx_u16m1, 8)
-OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int32x4, v_uint32x4, vuint64m2_t, vwsub_vv_i64m2, vnclipu_wx_u32m1, 4)
+OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int8x16, v_uint8x16, vuint16m2_t, vwsub_vv_i16m2, vnclipu_wx_u8m1, 16, vreinterpret_v_i16m2_u16m2)
+OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int16x8, v_uint16x8, vuint32m2_t, vwsub_vv_i32m2, vnclipu_wx_u16m1, 8, vreinterpret_v_i32m2_u32m2)
+OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int32x4, v_uint32x4, vuint64m2_t, vwsub_vv_i64m2, vnclipu_wx_u32m1, 4, vreinterpret_v_i64m2_u64m2)
 
 #define OPENCV_HAL_IMPL_RVV_ABS(_Tprvec, _Tpvec, suffix) \
 inline _Tprvec v_abs(const _Tpvec& a) \
