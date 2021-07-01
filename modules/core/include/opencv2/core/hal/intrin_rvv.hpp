@@ -1567,10 +1567,22 @@ inline bool v_check_any(const _Tpvec& a) \
     return (v.val[0] | v.val[1]) != 0; \
 }
 
+#define OPENCV_HAL_IMPL_RVV_CHECK_ALLANY_U64(_Tpvec, suffix, shift, vl) \
+inline bool v_check_all(const _Tpvec& a) \
+{ \
+    v_uint64x2 v = v_uint64x2(vsrl_vx_##suffix##m1(vnot_v_##suffix##m1(a, vl), shift, vl)); \
+    return (v.val[0] | v.val[1]) == 0; \
+} \
+inline bool v_check_any(const _Tpvec& a) \
+{ \
+    v_uint64x2 v = v_uint64x2(vsrl_vx_##suffix##m1(a, shift, vl)); \
+    return (v.val[0] | v.val[1]) != 0; \
+}
+
 OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(v_uint8x16, u8, 7, 16)
 OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(v_uint16x8, u16, 15, 8)
 OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(v_uint32x4, u32, 31, 4)
-OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(v_uint64x2, u64, 63, 2)
+OPENCV_HAL_IMPL_RVV_CHECK_ALLANY_U64(v_uint64x2, u64, 63, 2)
 
 
 inline bool v_check_all(const v_int8x16& a)
