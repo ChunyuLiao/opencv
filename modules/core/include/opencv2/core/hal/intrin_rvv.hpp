@@ -706,7 +706,11 @@ OPENCV_HAL_IMPL_RVV_EXTRACT_FP(v_float64x2, double, f64, vfmv_f_s_f64m1_f64, 2)
 
 ////////////// Load/Store //////////////
 
-#define OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(_Tpvec, _nTpvec, _Tp, hvl, vl, width, suffix, vmv) \
+#define OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(_Tpvec, _nTpvec, _Tp, hvl, vl, width, suffix, vmv, usuffix) \
+inline _Tpvec v_load(const _Tp* ptr) \
+{ \
+    return v_reinterpret_as_##usuffix((v_uint8x16)vle8_v_u8m1((uchar*)ptr, 16)); \
+} \
 inline _Tpvec v_load_aligned(const _Tp* ptr) \
 { \
     return _Tpvec(vle##width##_v_##suffix##m1(ptr, vl)); \
@@ -741,17 +745,17 @@ inline void v_store_high(_Tp* ptr, const _Tpvec& a) \
     vse##width##_v_##suffix##m1(ptr, vslidedown_vx_##suffix##m1(vmv(0, vl), a, hvl, vl), hvl); \
 }
 
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_uint8x16, vuint8m1_t, uchar, 8, 16, 8, u8, vmv_v_x_u8m1)
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_int8x16, vint8m1_t, schar, 8, 16, 8, i8, vmv_v_x_i8m1)
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_uint16x8, vuint16m1_t, ushort, 4, 8, 16, u16, vmv_v_x_u16m1)
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_int16x8, vint16m1_t, short, 4, 8, 16, i16, vmv_v_x_i16m1)
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_uint32x4, vuint32m1_t, unsigned, 2, 4, 32, u32, vmv_v_x_u32m1)
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_int32x4, vint32m1_t, int, 2, 4, 32, i32, vmv_v_x_i32m1)
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_uint64x2, vuint64m1_t, uint64, 1, 2, 64, u64, vmv_v_x_u64m1)
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_int64x2, vint64m1_t, int64, 1, 2, 64, i64, vmv_v_x_i64m1)
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_float32x4, vfloat32m1_t, float, 2, 4, 32, f32, vfmv_v_f_f32m1)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_uint8x16, vuint8m1_t, uchar, 8, 16, 8, u8, vmv_v_x_u8m1, u8)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_int8x16, vint8m1_t, schar, 8, 16, 8, i8, vmv_v_x_i8m1, s8)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_uint16x8, vuint16m1_t, ushort, 4, 8, 16, u16, vmv_v_x_u16m1, u16)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_int16x8, vint16m1_t, short, 4, 8, 16, i16, vmv_v_x_i16m1, s16)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_uint32x4, vuint32m1_t, unsigned, 2, 4, 32, u32, vmv_v_x_u32m1, u32)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_int32x4, vint32m1_t, int, 2, 4, 32, i32, vmv_v_x_i32m1, s32)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_uint64x2, vuint64m1_t, uint64, 1, 2, 64, u64, vmv_v_x_u64m1, u64)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_int64x2, vint64m1_t, int64, 1, 2, 64, i64, vmv_v_x_i64m1, s64)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_float32x4, vfloat32m1_t, float, 2, 4, 32, f32, vfmv_v_f_f32m1, f32)
 #if CV_SIMD128_64F
-OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_float64x2, vfloat64m1_t, double, 1, 2, 64, f64, vfmv_v_f_f64m1)
+OPENCV_HAL_IMPL_RVV_LOADSTORE_OP(v_float64x2, vfloat64m1_t, double, 1, 2, 64, f64, vfmv_v_f_f64m1, f64)
 #endif
 
 inline v_int8x16 v_load_halves(const schar* ptr0, const schar* ptr1)
