@@ -1987,7 +1987,7 @@ inline void v_pack_store(_Tp* ptr, const _wTpvec& a) \
     _wTp arr[_Tpvec::nlanes] = {0}; \
     v_store(arr, a); \
     v_store(arr + _wTpvec::nlanes, _wTpvec(vmv_v_x_##suffix##m1(0, hvl))); \
-    vse##hwidth##_v_##hsuffix##m1(ptr, shr(vle_v_##suffix##m2(arr, vl), 0, vl), hvl); \
+    vse_v_##hsuffix##m1(ptr, shr(vle_v_##suffix##m2(arr, vl), 0, vl), hvl); \
 } \
 template<int n> inline \
 _Tpvec v_rshr_pack(const _wTpvec& a, const _wTpvec& b) \
@@ -2027,7 +2027,7 @@ inline void v_pack_u_store(_Tp* ptr, const _wTpvec& a) \
     _wTp arr[_Tpvec::nlanes] = {0}; \
     v_store(arr, a); \
     v_store(arr + _wTpvec::nlanes, _wTpvec(vmv_v_x_##suffix##m1(0, hvl))); \
-    vse##hwidth##_v_##hsuffix##m1(ptr, rshr(cast(vmax_vx_##suffix##m2(vle_v_##suffix##m2(arr, vl), 0, vl)), 0, vl), hvl); \
+    vse_v_##hsuffix##m1(ptr, rshr(cast(vmax_vx_##suffix##m2(vle_v_##suffix##m2(arr, vl), 0, vl)), 0, vl), hvl); \
 } \
 template<int n> inline \
 _Tpvec v_rshr_pack_u(const _wTpvec& a, const _wTpvec& b) \
