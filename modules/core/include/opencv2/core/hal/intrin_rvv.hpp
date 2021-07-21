@@ -2437,7 +2437,8 @@ inline v_int32x4 v_ceil(const v_float32x4& a)
 
 inline v_int32x4 v_trunc(const v_float32x4& a)
 {
-    return v_int32x4(vfcvt_rtz_x_f_v_i32m1(a, 4));
+     //Todo: vfcvt_rtz_x_f_v_i32m1
+    return v_int32x4(vfcvt_x_f_v_i32m1(a, 4));
 }
 #if CV_SIMD128_64F
 inline v_int32x4 v_round(const v_float64x2& a)
@@ -2472,7 +2473,8 @@ inline v_int32x4 v_trunc(const v_float64x2& a)
 {
     double arr[4] = {a.val[0], a.val[1], 0, 0};
     vfloat64m2_t tmp = vle_v_f64m2(arr, 4);
-    return v_int32x4(vfncvt_rtz_x_f_w_i32m1(tmp, 4));
+    //Todo: vfncvt_rtz_x_f_w_i32m1
+    return v_int32x4(vfncvt_x_f_w_i32m1(tmp, 4));
 }
 #endif
 
