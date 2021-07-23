@@ -17,8 +17,8 @@ CV_CPU_OPTIMIZATION_HAL_NAMESPACE_BEGIN
 
 #define CV_SIMD128 1
 #define CV_SIMD128_64F 1
-#define float32_t float_t
-#define float64_t double
+//#define float32_t float_t
+//#define float64_t double
 //////////// Unsupported native intrinsics in C++ ////////////
 
 struct vuint8mf2_t
@@ -172,10 +172,10 @@ OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vuint16mf2_t, uint16_t, u16, 16, 4)
 OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vint16mf2_t, int16_t, i16, 16, 4)
 OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vuint32mf2_t, uint32_t, u32, 32, 2)
 OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vint32mf2_t, int32_t, i32, 32, 2)
-OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vfloat32mf2_t, float32_t, f32, 32, 2)
+OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vfloat32mf2_t, float, f32, 32, 2)
 OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vuint64mf2_t, uint64_t, u64, 64, 1)
 OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vint64mf2_t, int64_t, i64, 64, 1)
-OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vfloat64mf2_t, float64_t, f64, 64, 1)
+OPENCV_HAL_IMPL_RVV_NATIVE_LOADSTORE_MF2(vfloat64mf2_t, double, f64, 64, 1)
 
 
 #define OPENCV_HAL_IMPL_RVV_NATIVE_WCVT(_Tpwvec, _Tpvec, _wTp, wcvt, suffix, width, n) \
