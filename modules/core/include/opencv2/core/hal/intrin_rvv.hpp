@@ -2046,15 +2046,19 @@ OPENCV_HAL_IMPL_RVV_ABSDIFF(v_int16x8, absdiffs)
 
 // use reinterpret instead of c-style casting.
 #ifndef __clang__
-#define OPENCV_HAL_IMPL_RVV_ABSDIFF_S(_Tpvec, _rTpvec, _nwTpvec, sub, rshr, vl) \
+#define OPENCV_HAL_IMPL_RVV_ABSDIFF_S_R(_Tpvec, _rTpvec, _nwTpvec, sub, rshr, width, vl) \
 inline _rTpvec v_absdiff(const _Tpvec& a, const _Tpvec& b) \
 { \
-    return _rTpvec(rshr((_nwTpvec)sub(v_max(a, b), v_min(a, b), vl), 0, vl)); \
+    return _rTpvec(rshr(vreinterpret_v_i##width##m2_u##width##m2(sub(v_max(a, b), v_min(a, b), vl)), 0, vl)); \
+} 
+#define OPENCV_HAL_IMPL_RVV_ABSDIFF_S(_Tpvec, _rTpvec, _nwTpvec, sub, rshr,  width, vl) \
+inline _rTpvec v_absdiff(const _Tpvec& a, const _Tpvec& b) \
+{ \
+    return _rTpvec(rshr(vreinterpret_v_i##width##m2_u##width##m2(sub(v_max(a, b), v_min(a, b), vl)), 0, vl)); \
 }
-
-OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int8x16, v_uint8x16, vuint16m2_t, vwsub_vv_i16m2, vnclipu_wx_u8m1, 16)
-OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int16x8, v_uint16x8, vuint32m2_t, vwsub_vv_i32m2, vnclipu_wx_u16m1, 8)
-OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int32x4, v_uint32x4, vuint64m2_t, vwsub_vv_i64m2, vnclipu_wx_u32m1, 4)
+OPENCV_HAL_IMPL_RVV_ABSDIFF_S(v_int8x16, v_uint8x16, vuint16m2_t, vwsub_vv_i16m2, vnclipu_wx_u8m1, 16, 16)
+OPENCV_HAL_IMPL_RVV_ABSDIFF_S_R(v_int16x8, v_uint16x8, vuint32m2_t, vwsub_vv_i32m2, vnclipu_wx_u16m1, 32, 8)
+OPENCV_HAL_IMPL_RVV_ABSDIFF_S_R(v_int32x4, v_uint32x4, vuint64m2_t, vwsub_vv_i64m2, vnclipu_wx_u32m1, 64, 4)
 #else
 #define OPENCV_HAL_IMPL_RVV_ABSDIFF_S(_Tpvec, _rTpvec, _nwTpvec, sub, rshr, width, vl) \
 inline _rTpvec v_absdiff(const _Tpvec& a, const _Tpvec& b) \
