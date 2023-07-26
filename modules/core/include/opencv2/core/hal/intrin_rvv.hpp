@@ -2826,7 +2826,7 @@ OPENCV_HAL_IMPL_RVV_SCAN_FORWOARD_OP(v_float64x2, double, f64)
 inline v_int8x16 v_pack_triplets(const v_int8x16& vec)
 {
     uint64 ptr[2] = {0x0908060504020100, 0xFFFFFFFF0E0D0C0A};
-    return v_int8x16((vint8m1_t)vrgather_vv_u8m1((vuint8m1_t)vint8m1_t(vec), (vuint8m1_t)vle64_v_u64m1(ptr, 2), 16));
+    return v_int8x16(vreinterpret_v_u8m1_i8m1(vrgather_vv_u8m1(vreinterpret_v_i8m1_u8m1(vint8m1_t(vec)), vreinterpret_v_u64m1_u8m1(vle64_v_u64m1(ptr, 2)), 16)));
 }
 inline v_uint8x16 v_pack_triplets(const v_uint8x16& vec)
 {
@@ -2836,7 +2836,7 @@ inline v_uint8x16 v_pack_triplets(const v_uint8x16& vec)
 inline v_int16x8 v_pack_triplets(const v_int16x8& vec)
 {
     uint64 ptr[2] = {0x0908060504020100, 0xFFFFFFFF0E0D0C0A};
-    return v_int16x8((vint16m1_t)vrgather_vv_u8m1((vuint8m1_t)vint16m1_t(vec), (vuint8m1_t)vle64_v_u64m1(ptr, 2), 16));
+    return v_int16x8(vreinterpret_v_u8m1_i16m1(vrgather_vv_u8m1(vreinterpret_v_i16m1_u8m1(vint16m1_t(vec)), vreinterpret_v_u64m1_u8m1(vle64_v_u64m1(ptr, 2)), 16)));
 }
 inline v_uint16x8 v_pack_triplets(const v_uint16x8& vec)
 {
