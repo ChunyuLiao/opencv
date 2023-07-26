@@ -1917,21 +1917,32 @@ inline v_float64x2 v_muladd(const v_float64x2& a, const v_float64x2& b, const v_
 
 // use overloaded vcpop in clang, no casting like (vuint64m1_t) is needed.
 #ifndef __clang__
-#define OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(_Tpvec, suffix, shift, vl) \
+#define OPENCV_HAL_IMPL_RVV_CHECK_ALLANY_R(_Tpvec, suffix, shift, vl) \
 inline bool v_check_all(const _Tpvec& a) \
 { \
-    v_uint64x2 v = v_uint64x2((vuint64m1_t)vsrl_vx_##suffix##m1(vnot_v_##suffix##m1(a, vl), shift, vl)); \
+    v_uint64x2 v = v_uint64x2(vreinterpret_v_##suffix##m1_u64m1(vsrl_vx_##suffix##m1(vnot_v_##suffix##m1(a, vl), shift, vl))); \
     return (v.val[0] | v.val[1]) == 0; \
 } \
 inline bool v_check_any(const _Tpvec& a) \
 { \
-    v_uint64x2 v = v_uint64x2((vuint64m1_t)vsrl_vx_##suffix##m1(a, shift, vl)); \
+    v_uint64x2 v = v_uint64x2(vreinterpret_v_##suffix##m1_u64m1(vsrl_vx_##suffix##m1(a, shift, vl))); \
+    return (v.val[0] | v.val[1]) != 0; \
+}
+#define OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(_Tpvec, suffix, shift, vl) \
+inline bool v_check_all(const _Tpvec& a) \
+{ \
+    v_uint64x2 v = v_uint64x2(vsrl_vx_##suffix##m1(vnot_v_##suffix##m1(a, vl), shift, vl)); \
+    return (v.val[0] | v.val[1]) == 0; \
+} \
+inline bool v_check_any(const _Tpvec& a) \
+{ \
+    v_uint64x2 v = v_uint64x2(vsrl_vx_##suffix##m1(a, shift, vl)); \
     return (v.val[0] | v.val[1]) != 0; \
 }
 
-OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(v_uint8x16, u8, 7, 16)
-OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(v_uint16x8, u16, 15, 8)
-OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(v_uint32x4, u32, 31, 4)
+OPENCV_HAL_IMPL_RVV_CHECK_ALLANY_R(v_uint8x16, u8, 7, 16)
+OPENCV_HAL_IMPL_RVV_CHECK_ALLANY_R(v_uint16x8, u16, 15, 8)
+OPENCV_HAL_IMPL_RVV_CHECK_ALLANY_R(v_uint32x4, u32, 31, 4)
 OPENCV_HAL_IMPL_RVV_CHECK_ALLANY(v_uint64x2, u64, 63, 2)
 
 
@@ -2913,7 +2924,7 @@ inline v_int32x4 v_ceil(const v_float32x4& a)
 
 inline v_int32x4 v_trunc(const v_float32x4& a)
 {
-    return v_int32x4(vfcvt_rtz_x_f_v_i32m1(a, 4));
+    return v_int32x4(vfcvt_x_f_v_i32m1(a, 4));
 }
 #if CV_SIMD128_64F
 #ifndef __clang__
